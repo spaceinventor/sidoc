@@ -1,0 +1,3 @@
+[submodule "lib/libdoc"]
+	path = lib/libdoc
+	url = https://github.com/spaceinventor/libdoc
