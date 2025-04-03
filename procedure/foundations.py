@@ -17,7 +17,7 @@ class Procedure:
         """
         Sends a notification via Google Chat.
         """
-        webhook_url = self.args.google_chat_webhook # Replace with your actual webhook URL
+        webhook_url = self.args.google_chat_webhook
         payload = {"text": message}
         headers = {"Content-Type": "application/json; charset=UTF-8"}
 
@@ -38,7 +38,6 @@ class Procedure:
         try:
             voltage = pycsh.get("psu_voltage_out", node=self.args.psu_node)
             current = pycsh.get("psu_current_out", node=self.args.psu_node)
-            # Show 6 decimal places, for instance
             self.logger.info(f"Voltage: {voltage:.6f} V")
             self.logger.info(f"Current: {current:.6f} A")
         except Exception as e:
@@ -47,7 +46,6 @@ class Procedure:
             current = 0
 
         power_consumption = voltage * current
-        # Also display more precision for the power
         self.logger.info(f"Power Consumption: {power_consumption:.6f} W")
         return power_consumption
 
@@ -98,12 +96,11 @@ class Procedure:
                 self.send_google_chat_notification(f"Authentication errors on {interface_name} on Node {node}.")
                 return None
 
-            # Optional same-interface check (TX vs RX difference) if you still want it
-            # ...
+            
             self.logger.info(f"{interface_name} appears to be operating correctly on Node {node}.")
             self.send_google_chat_notification(f"{interface_name} appears to be operating correctly on Node {node}.")
 
-            return stats  # Return the stats object if everything is OK
+            return stats
 
         except Exception as e:
             self.logger.error(f"An error occurred while checking {interface_name} on Node {node}: {e}")
@@ -122,8 +119,8 @@ class Procedure:
         all_ok = True
 
         nodes = [self.args.can_node]
-        interfaces = self.args.interfaces  # e.g. ["CAN0", "CAN1"]
-        stats_map = {}  # stats_map[node] = {"CAN0": statsObj or None, "CAN1": statsObj or None}
+        interfaces = self.args.interfaces
+        stats_map = {}  
 
         for node in nodes:
             self.logger.info(f"Checking interfaces on Node {node}...")
@@ -137,7 +134,6 @@ class Procedure:
                     node_stats[interface] = stats_obj
             stats_map[node] = node_stats
 
-        # After collecting stats for each interface, do cross-compare on CAN0 vs CAN1 for each node
         for node, ifstats in stats_map.items():
             if "CAN0" in ifstats and "CAN1" in ifstats:
                 can0_stats = ifstats["CAN0"]
@@ -178,7 +174,6 @@ class Procedure:
                 self.logger.info(f"Node {node} has no CAN0 vs CAN1 cross-comparison because both are not in 'interfaces'")
                 self.send_google_chat_notification(f"Node {node} has no CAN0 vs CAN1 cross-comparison because both are not in 'interfaces'")
 
-        # Summarize result
         if all_ok:
             self.logger.info("All specified CAN interfaces are functioning correctly on all nodes.")
             self.send_google_chat_notification("All specified CAN interfaces are functioning correctly on all nodes.")
@@ -188,11 +183,4 @@ class Procedure:
 
 
 
-            
-    def generate_static_load(self):
-        """Generate static load for the module."""
-        raise NotImplementedError("Subclasses should implement this method.")
-    
-    def stop_static_load(self):
-        """Deactivate the module and stop static load."""
-        raise NotImplementedError("Subclasses should implement this method.")
+        
