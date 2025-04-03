@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "sidoc"
+version = "0.1.0"
+description = "Base python classes and generic documenation"
+authors = ["William <william@space-inventor.com>"]
+packages = [{ include = "procedure" }]
+include = ["doc/**"]
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "2.32.3"
+pycsh = { git = "https://github.com/spaceinventor/PyCSH.git" }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

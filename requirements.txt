@@ -1,0 +1,5 @@
+# Install PyCSH from GitHub
+# Use `git+<repo_url>@<tag> (eg: pip install git+https://github.com/spaceinventor/PyCSH.git@3.2.0) to install specific version,
+#  only works for tagged commits.
+git+https://github.com/spaceinventor/PyCSH.git
+requests==2.32.3
