@@ -2,7 +2,6 @@
 
 import pycsh
 import requests
-import time
 
 class Procedure:
     def __init__(self, logger, args):
